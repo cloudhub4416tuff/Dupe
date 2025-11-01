@@ -135,6 +135,8 @@ Tabs["Main"]:AddToggle("tDupe", {
                         Content = "Worked",
                         Duration = 5
                     })
+
+                    task.wait(1)
                 end
             end)
         end
