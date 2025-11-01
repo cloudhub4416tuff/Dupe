@@ -94,4 +94,4 @@ SaveManager:LoadAutoloadConfig()
 
 getgenv().DUPE = true
 
-queue_on_teleport('loadstring(readfile("Cloudhub/PJS/dupe.lua"))()')
+queue_on_teleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/cloudhub4416tuff/Dupe/refs/heads/main/dupe.lua"))()')
