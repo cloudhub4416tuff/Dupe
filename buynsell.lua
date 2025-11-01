@@ -160,4 +160,18 @@ Tabs["Main"]:AddToggle("tDupe", {
     end
 })
 
+Tabs["Main"]:AddButton({
+    Title = "Map 1 Priv";
+    Callback = function()
+        TeleportService:Teleport(13883279773, client)
+    end
+})
+
+Tabs["Main"]:AddButton({
+    Title = "Map 2 Priv";
+    Callback = function()
+        TeleportService:Teleport(13883059853, client)
+    end
+})
+
 Window:SelectTab(1)
