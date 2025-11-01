@@ -93,12 +93,28 @@ Tabs["Main"]:AddToggle("tDupe", {
             task.spawn(function()
                 while options.tDupe.Value do
                     task.wait()
+                    local cont = true
+                    for i, v in playerData.Parent:GetChildren() do
+                        if v == playerData then continue end
+                        local a = v:FindFirstChild("Custom_Properties")
+                        local b = a and a:FindFirstChild("Nezuko_pacifier_stuff")
+                        local shrink = b and b:FindFirstChild("Shrinkage")
+                        if not shrink then continue end
+                        if shrink.Value == 69 then
+                            cont = false
+                            break end
+                    end
+                    if not cont then continue end
                     if not (client.Backpack:FindFirstChild("Wen") or client.Character:FindFirstChild("Wen")) then
                         if playerData.Inventory.Items:FindFirstChild("Wen") then
                             Handle_Initiate_S:FireServer("change_equip_for_item", client, playerData.Inventory, playerData.Inventory.Items.Wen)
                         else
-                            local bag = workspace:WaitForChild("Money bag")
                             while options.tDupe.Value and not playerData.Inventory.Items:FindFirstChild("Wen") do
+                                local bag = workspace:WaitForChild("Money bag", math.huge)
+                                if bag.Position.Y < 0 then
+                                    bag:Destroy()
+                                    continue
+                                end
                                 client.Character.HumanoidRootPart.CFrame = bag.CFrame
                                 Handle_Initiate_S:FireServer("transfer_money_to_money_bag2", client, playerData, bag)
                                 task.wait()
@@ -114,7 +130,7 @@ Tabs["Main"]:AddToggle("tDupe", {
                         Library:Notify({
                             Title = "ATTENTION",
                             Content = "Error while transfering wen from inventory to backpack",
-                            Duration = 5
+                            Duration = 10000
                         })
                         return
                     end
