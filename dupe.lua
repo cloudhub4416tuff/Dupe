@@ -29,6 +29,8 @@ playerData = ReplicatedStorage.Player_Data:WaitForChild(client.Name)
 local Handle_Initiate_S = ReplicatedStorage.Remotes.To_Server:WaitForChild("Handle_Initiate_S")
 local Handle_Initiate_S_ = ReplicatedStorage.Remotes.To_Server:WaitForChild("Handle_Initiate_S_")
 
+Handle_Initiate_S:FireServer("Change_Value", playerData:WaitForChild("Custom_Properties"):WaitForChild("Nezuko_pacifier_stuff"):WaitForChild("Shrinkage"), 0)
+
 local viewportSize = camera.ViewportSize
 
 local Window = Library:CreateWindow{
@@ -52,15 +54,49 @@ Tabs["Main"]:AddToggle("tDupe", {
     Default = false;
     Callback = function(Value)
         if Value then
-            local bag = client.Backpack:WaitForChild("Wen", math.huge)
+            local wen = client.Backpack:WaitForChild("Wen", 10)
+            if not wen then
+                local shrink = playerData:WaitForChild("Custom_Properties"):WaitForChild("Nezuko_pacifier_stuff"):WaitForChild("Shrinkage")
+                Handle_Initiate_S:FireServer("Change_Value", shrink, 69)
+
+                while options.tDupe.Value and shrink.Value ~= 69 do task.wait() end
+                if not options.tDupe.Value then return end
+
+                while options.tDupe.Value and not playerData.Inventory.Items:FindFirstChild("Wen") do
+                    local bag = workspace:WaitForChild("Money bag")
+                    if bag.Position.Y < 0 then
+                        bag:Destroy()
+                        break
+                    end
+                    client.Character.HumanoidRootPart.CFrame = bag.CFrame
+                    Handle_Initiate_S:FireServer("transfer_money_to_money_bag2", client, playerData, bag)
+                    task.wait()
+                end
+
+                if not options.tDupe.Value then return end
+
+                Handle_Initiate_S:FireServer("change_equip_for_item", client, playerData.Inventory, playerData.Inventory.Items.Wen)
+
+                client.Backpack:WaitForChild("Wen")
+
+                while playerData.Inventory.Items.Wen:WaitForChild("Amount").Value < 150000 do task.wait() end
+
+                Handle_Initiate_S:FireServer("Change_Value", playerData:WaitForChild("Custom_Properties"):WaitForChild("Nezuko_pacifier_stuff"):WaitForChild("Shrinkage"), 67)
+
+                while options.tDupe.Value and shrink.Value ~= 67 do task.wait() end
+
+
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, client)
+
+                return
+            end
             if not options.tDupe.Value then return end
-            bag.Parent = client.Character
-            task.wait(1)
-            bag.Parent = workspace
-            workspace:WaitForChild("Money bag", 5)
+            wen.Parent = client.Character
+            wen.Parent = workspace
+            while playerData.Inventory.Items:FindFirstChild("Wen") do task.wait() end
             Handle_Initiate_S:FireServer("remove_item", playerData)
 
-            task.wait(0.5)
+            while playerData.Parent do task.wait() end
 
             TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, client)
         end
@@ -95,4 +131,5 @@ SaveManager:LoadAutoloadConfig()
 
 getgenv().DUPE = true
 
+--queue_on_teleport(`loadstring(readfile("Cloudhub/PJS/dupe.lua"))()`)
 queue_on_teleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/cloudhub4416tuff/Dupe/refs/heads/main/dupe.lua"))()')
