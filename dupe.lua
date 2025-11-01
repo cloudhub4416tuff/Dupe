@@ -53,6 +53,7 @@ Tabs["Main"]:AddToggle("tDupe", {
     Callback = function(Value)
         if Value then
             local bag = client.Backpack:WaitForChild("Wen", math.huge)
+            if not options.tDupe.Value then return end
             bag.Parent = client.Character
             task.wait(1)
             bag.Parent = workspace
