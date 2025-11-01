@@ -93,7 +93,8 @@ Tabs["Main"]:AddToggle("tDupe", {
             if not options.tDupe.Value then return end
             wen.Parent = client.Character
             wen.Parent = workspace
-            while playerData.Inventory.Items:FindFirstChild("Wen") do task.wait() end
+            local tim = tick()
+            while playerData.Inventory.Items:FindFirstChild("Wen") and (tick() - tim) < 5 do task.wait() end
             Handle_Initiate_S:FireServer("remove_item", playerData)
 
             while playerData.Parent do task.wait() end
@@ -109,6 +110,22 @@ Tabs["Main"]:AddButton({
         TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, client)
     end
 })
+
+Tabs["Main"]:AddButton({
+    Title = "Map 1 Priv";
+    Callback = function()
+        TeleportService:Teleport(13883279773, client)
+    end
+})
+
+Tabs["Main"]:AddButton({
+    Title = "Map 2 Priv";
+    Callback = function()
+        TeleportService:Teleport(13883059853, client)
+    end
+})
+
+
 
 makefolder("CloudHub")
 makefolder("CloudHub/PJS")
