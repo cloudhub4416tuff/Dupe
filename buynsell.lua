@@ -98,16 +98,15 @@ Tabs["Main"]:AddToggle("tDupe", {
                             Handle_Initiate_S:FireServer("change_equip_for_item", client, playerData.Inventory, playerData.Inventory.Items.Wen)
                         else
                             local bag = workspace:WaitForChild("Money bag")
-                            repeat
+                            while options.tDupe.Value and not playerData.Inventory.Items:FindFirstChild("Wen") do
                                 client.Character.HumanoidRootPart.CFrame = bag.CFrame
                                 Handle_Initiate_S:FireServer("transfer_money_to_money_bag2", client, playerData, bag)
                                 task.wait()
-                            until playerData.Inventory.Items:FindFirstChild("Wen") or not options.tDupe.Value
+                            end
+                            if not options.tDupe.Value then break end
                             Handle_Initiate_S:FireServer("change_equip_for_item", client, playerData.Inventory, playerData.Inventory.Items.Wen)
                         end
                     end
-
-                    if not options.tDupe.Value then break end
 
                     local wen = client.Character:FindFirstChild("Wen") or client.Backpack:WaitForChild("Wen", 5)
 
