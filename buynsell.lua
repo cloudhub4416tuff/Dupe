@@ -140,6 +140,7 @@ Tabs["Main"]:AddToggle("tDupe", {
                     Handle_Initiate_S:FireServer("buysomething", client, item, playerData.Yen, playerData.Inventory, 139)
 
                     local lanterns = playerData.Inventory.Items:WaitForChild(item, 5)
+                    if not lanterns then continue end
                     while lanterns:WaitForChild("Amount").Value < 139 and options.tDupe.Value do
                         task.wait()
                     end
