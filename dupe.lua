@@ -20,6 +20,7 @@ local CollectionService = game:GetService("CollectionService")
 local StarterGui = game:GetService("StarterGui")
 local TeleportService = game:GetService("TeleportService")
 local LocalizationService = game:GetService("LocalizationService")
+local VirtualUser = game:GetService("VirtualUser")
 
 local client = Players.LocalPlayer
 local camera = workspace.CurrentCamera
@@ -28,6 +29,12 @@ playerData = ReplicatedStorage.Player_Data:WaitForChild(client.Name)
 
 local Handle_Initiate_S = ReplicatedStorage.Remotes.To_Server:WaitForChild("Handle_Initiate_S")
 local Handle_Initiate_S_ = ReplicatedStorage.Remotes.To_Server:WaitForChild("Handle_Initiate_S_")
+
+client.Idled:Connect(function()
+    VirtualUser:Button2Down(Vector2.new(0,0), camera.CFrame)
+    task.wait(1)
+    VirtualUser:Button2Up(Vector2.new(0,0), camera.CFrame)
+end)
 
 Handle_Initiate_S:FireServer("Change_Value", playerData:WaitForChild("Custom_Properties"):WaitForChild("Nezuko_pacifier_stuff"):WaitForChild("Shrinkage"), 0)
 
