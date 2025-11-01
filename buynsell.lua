@@ -101,11 +101,13 @@ Tabs["Main"]:AddToggle("tDupe", {
                             repeat
                                 client.Character.HumanoidRootPart.CFrame = bag.CFrame
                                 Handle_Initiate_S:FireServer("transfer_money_to_money_bag2", client, playerData, bag)
-                                task.wait(1)
+                                task.wait()
                             until playerData.Inventory.Items:FindFirstChild("Wen") or not options.tDupe.Value
                             Handle_Initiate_S:FireServer("change_equip_for_item", client, playerData.Inventory, playerData.Inventory.Items.Wen)
                         end
                     end
+
+                    if not options.tDupe.Value then break end
 
                     local wen = client.Character:FindFirstChild("Wen") or client.Backpack:WaitForChild("Wen", 5)
 
@@ -123,7 +125,9 @@ Tabs["Main"]:AddToggle("tDupe", {
                     Handle_Initiate_S:FireServer("buysomething", client, item, playerData.Yen, playerData.Inventory, 139)
 
                     local lanterns = playerData.Inventory.Items:WaitForChild(item, 5)
-                    task.wait(1)
+                    while lanterns:WaitForChild("Amount").Value < 139 and options.tDupe.Value do
+                        task.wait()
+                    end
 
                     game:GetService("ReplicatedStorage"):WaitForChild("Sell_Items_tang"):InvokeServer({[lanterns.Settings.Id.Value] = lanterns.Amount.Value}, much, 0)
 
