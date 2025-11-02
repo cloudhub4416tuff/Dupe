@@ -152,7 +152,7 @@ Tabs["Main"]:AddToggle("tDupe", {
                                 local bag = workspace:WaitForChild("Money bag", math.huge)
                                 local hrp = client.Character:WaitForChild("HumanoidRootPart")
                                 local Distance = (bag.Position - hrp.Position).Magnitude
-                                if bag.Position.Y < 0 or Distance > 200 then
+                                if bag.Position.Y < 0 --[[or Distance > 200]] then
                                     bag:Destroy()
                                     continue
                                 end
