@@ -150,7 +150,9 @@ Tabs["Main"]:AddToggle("tDupe", {
                         else
                             while options.tDupe.Value and not playerData.Inventory.Items:FindFirstChild("Wen") do
                                 local bag = workspace:WaitForChild("Money bag", math.huge)
-                                if bag.Position.Y < 0 then
+                                local hrp = client.Character:WaitForChild("HumanoidRootPart")
+                                local Distance = (bag.Position - hrp.Position).Magnitude
+                                if bag.Position.Y < 0 or Distance > 100 then
                                     bag:Destroy()
                                     continue
                                 end
