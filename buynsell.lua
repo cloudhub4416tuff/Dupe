@@ -28,6 +28,17 @@ playerData = ReplicatedStorage.Player_Data:FindFirstChild(client.Name)
 local Handle_Initiate_S = ReplicatedStorage.Remotes.To_Server:WaitForChild("Handle_Initiate_S")
 local Handle_Initiate_S_ = ReplicatedStorage.Remotes.To_Server:WaitForChild("Handle_Initiate_S_")
 
+
+local blankTween = {
+    Play = function() end;
+    Cancel = function() end;
+    Completed = {
+        Wait = function() end;
+    };
+}
+
+
+
 workspace.FallenPartsDestroyHeight = -math.huge
 
 client.Idled:Connect(function()
@@ -71,6 +82,23 @@ local farmHelper = function()
 	return Farm
 end
 
+local tweento = function(coords)
+    if not coords then
+        return blankTween
+    end
+    local hrp = client.Character:WaitForChild("HumanoidRootPart")
+    local Distance = (coords.Position - hrp.Position).Magnitude
+    local Speed = Distance/300
+
+    local tween = TweenService:Create(hrp,
+        TweenInfo.new(Speed, Enum.EasingStyle.Linear),
+        { CFrame = coords}
+    )
+
+    tween:Play()
+    return tween
+end
+
 local Window = Library:CreateWindow{
     Title = "Cloudhub | Project Slayer (discord.gg/wgFBpD7mRh)",
     TabWidth = math.clamp(viewportSize.X/8, 100, 150),
@@ -91,8 +119,9 @@ local price = 600
 local sell = 180
 local money = 150000
 local ore = 25000
-local much = ((money/price) * sell) // ore
-local wensneed = math.ceil((ore * much) / sell) * price
+local much = math.floor(money/price) --((money/price) * sell) // ore
+local ores = (much * sell) // ore
+--local wensneed = math.ceil((ore * much) / sell) * price
 
 Tabs["Main"]:AddToggle("tDupe", {
     Title = "Do Everything";
@@ -125,7 +154,7 @@ Tabs["Main"]:AddToggle("tDupe", {
                                     bag:Destroy()
                                     continue
                                 end
-                                client.Character.HumanoidRootPart.CFrame = bag.CFrame
+                                tweento(bag.CFrame).Completed:Wait()
                                 Handle_Initiate_S:FireServer("transfer_money_to_money_bag2", client, playerData, bag)
                                 task.wait()
                             end
@@ -147,15 +176,15 @@ Tabs["Main"]:AddToggle("tDupe", {
 
                     Handle_Initiate_S_:InvokeServer("give_thing_thing_yem", playerData, wen:WaitForChild("Handle"), "Wen")
 
-                    Handle_Initiate_S:FireServer("buysomething", client, item, playerData.Yen, playerData.Inventory, 139)
+                    Handle_Initiate_S:FireServer("buysomething", client, item, playerData.Yen, playerData.Inventory, much)
 
                     local lanterns = playerData.Inventory.Items:WaitForChild(item, 5)
                     if not lanterns then continue end
-                    while lanterns:WaitForChild("Amount").Value < 139 and options.tDupe.Value do
+                    while lanterns:WaitForChild("Amount").Value < much and options.tDupe.Value do
                         task.wait()
                     end
 
-                    game:GetService("ReplicatedStorage"):WaitForChild("Sell_Items_tang"):InvokeServer({[lanterns.Settings.Id.Value] = lanterns.Amount.Value}, much, 0)
+                    game:GetService("ReplicatedStorage"):WaitForChild("Sell_Items_tang"):InvokeServer({[lanterns.Settings.Id.Value] = lanterns.Amount.Value}, ores, 0)
 
                     Library:Notify({
                         Title = "ATTENTION",
