@@ -220,5 +220,12 @@ Tabs["Main"]:AddButton({
     end
 })
 
+Tabs["Main"]:AddButton({
+    Title = "Trading Place";
+    Callback = function()
+        TeleportService:Teleport(13489082242, client)
+    end
+})
+
 
 Window:SelectTab(1)
