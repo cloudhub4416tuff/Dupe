@@ -28,6 +28,8 @@ playerData = ReplicatedStorage.Player_Data:FindFirstChild(client.Name)
 local Handle_Initiate_S = ReplicatedStorage.Remotes.To_Server:WaitForChild("Handle_Initiate_S")
 local Handle_Initiate_S_ = ReplicatedStorage.Remotes.To_Server:WaitForChild("Handle_Initiate_S_")
 
+workspace.FallenPartsDestroyHeight = -math.huge
+
 client.Idled:Connect(function()
     VirtualUser:Button2Down(Vector2.new(0,0), camera.CFrame)
     task.wait(1)
@@ -98,6 +100,7 @@ Tabs["Main"]:AddToggle("tDupe", {
     Callback = function(Value)
         if Value then
             task.spawn(function()
+                local fh = farmHelper()
                 while options.tDupe.Value do
                     task.wait()
                     local cont = true
@@ -162,6 +165,7 @@ Tabs["Main"]:AddToggle("tDupe", {
 
                     task.wait(1)
                 end
+                fh:Stop()
             end)
         end
     end
