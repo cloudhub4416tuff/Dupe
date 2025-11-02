@@ -167,6 +167,45 @@ Tabs["Main"]:AddToggle("tDupe", {
     end
 })
 
+local function toggle(Value)
+    for i, v in listfiles("CloudHub/PJS/DUPE") do
+        if v:match("autoload.txt$") then
+            local conf = readfile(v)
+            local dir = v:match("CloudHub/PJS/DUPE/%d+/settings/")
+            conf = `{dir}{conf}.json`
+            if isfile(conf) then
+                local data = readfile(conf)
+                local json = HttpService:JSONDecode(data)
+                json.objects[1]["value"] = Value
+                json = HttpService:JSONEncode(json)
+                writefile(conf, json)
+            end
+        end
+    end
+end
+
+Tabs["Main"]:AddButton({
+    Title = "Disable All Duping Accs";
+    Callback = function()
+        toggle(false)
+    end
+})
+
+Tabs["Main"]:AddButton({
+    Title = "Enable All Duping Accs";
+    Callback = function()
+        toggle(true)
+    end
+})
+
+
+Tabs["Main"]:AddButton({
+    Title = "Rejoin";
+    Callback = function()
+        TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, client)
+    end
+})
+
 Tabs["Main"]:AddButton({
     Title = "Map 1 Priv";
     Callback = function()
@@ -180,5 +219,6 @@ Tabs["Main"]:AddButton({
         TeleportService:Teleport(13883059853, client)
     end
 })
+
 
 Window:SelectTab(1)
